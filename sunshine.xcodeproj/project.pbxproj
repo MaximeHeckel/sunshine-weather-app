@@ -15,6 +15,12 @@
 		9C7992B025701B1D0072BEE2 /* sunshine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992AE25701B1D0072BEE2 /* sunshine.xcdatamodeld */; };
 		9C7992BB25701B1D0072BEE2 /* sunshineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992BA25701B1D0072BEE2 /* sunshineTests.swift */; };
 		9C7992C625701B1D0072BEE2 /* sunshineUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992C525701B1D0072BEE2 /* sunshineUITests.swift */; };
+		9C7992D725701C770072BEE2 /* WeatherAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992D625701C770072BEE2 /* WeatherAPIClient.swift */; };
+		9C7992DC25701CC10072BEE2 /* SunDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992DB25701CC10072BEE2 /* SunDial.swift */; };
+		9C7992E125701CDB0072BEE2 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992E025701CDB0072BEE2 /* Settings.swift */; };
+		9C7992E625701D170072BEE2 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992E525701D170072BEE2 /* Forecast.swift */; };
+		9C7992EB25701D530072BEE2 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992EA25701D530072BEE2 /* LocationService.swift */; };
+		9C7992F025701D8A0072BEE2 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7992EF25701D8A0072BEE2 /* SearchBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +55,12 @@
 		9C7992C125701B1D0072BEE2 /* sunshineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sunshineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C7992C525701B1D0072BEE2 /* sunshineUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sunshineUITests.swift; sourceTree = "<group>"; };
 		9C7992C725701B1D0072BEE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9C7992D625701C770072BEE2 /* WeatherAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPIClient.swift; sourceTree = "<group>"; };
+		9C7992DB25701CC10072BEE2 /* SunDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunDial.swift; sourceTree = "<group>"; };
+		9C7992E025701CDB0072BEE2 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		9C7992E525701D170072BEE2 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
+		9C7992EA25701D530072BEE2 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		9C7992EF25701D8A0072BEE2 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,11 +113,17 @@
 			children = (
 				9C7992A325701B180072BEE2 /* sunshineApp.swift */,
 				9C7992A525701B180072BEE2 /* ContentView.swift */,
+				9C7992DB25701CC10072BEE2 /* SunDial.swift */,
+				9C7992E025701CDB0072BEE2 /* Settings.swift */,
+				9C7992E525701D170072BEE2 /* Forecast.swift */,
+				9C7992EF25701D8A0072BEE2 /* SearchBar.swift */,
+				9C7992EA25701D530072BEE2 /* LocationService.swift */,
 				9C7992A725701B1D0072BEE2 /* Assets.xcassets */,
 				9C7992AC25701B1D0072BEE2 /* Persistence.swift */,
 				9C7992B125701B1D0072BEE2 /* Info.plist */,
 				9C7992AE25701B1D0072BEE2 /* sunshine.xcdatamodeld */,
 				9C7992A925701B1D0072BEE2 /* Preview Content */,
+				9C7992D625701C770072BEE2 /* WeatherAPIClient.swift */,
 			);
 			path = sunshine;
 			sourceTree = "<group>";
@@ -265,9 +283,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C7992E625701D170072BEE2 /* Forecast.swift in Sources */,
+				9C7992D725701C770072BEE2 /* WeatherAPIClient.swift in Sources */,
 				9C7992AD25701B1D0072BEE2 /* Persistence.swift in Sources */,
+				9C7992DC25701CC10072BEE2 /* SunDial.swift in Sources */,
 				9C7992A625701B180072BEE2 /* ContentView.swift in Sources */,
+				9C7992E125701CDB0072BEE2 /* Settings.swift in Sources */,
 				9C7992B025701B1D0072BEE2 /* sunshine.xcdatamodeld in Sources */,
+				9C7992F025701D8A0072BEE2 /* SearchBar.swift in Sources */,
+				9C7992EB25701D530072BEE2 /* LocationService.swift in Sources */,
 				9C7992A425701B180072BEE2 /* sunshineApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,7 +462,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.maximeheckel.sunshine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -460,7 +484,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.maximeheckel.sunshine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
