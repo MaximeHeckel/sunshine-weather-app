@@ -34,7 +34,20 @@ class LocationSearchService: NSObject, ObservableObject, MKLocalSearchCompleterD
     }
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        self.completions = completer.results
+        // Filter the results
+        self.completions = completer.results.filter { result in
+
+            
+            if result.title.rangeOfCharacter(from: CharacterSet.decimalDigits) != nil {
+                return false
+            }
+            
+            if result.subtitle.rangeOfCharacter(from: CharacterSet.decimalDigits) != nil {
+                return false
+            }
+            
+            return true
+        }
     }
 }
 
