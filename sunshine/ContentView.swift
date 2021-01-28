@@ -8,6 +8,11 @@
 import SwiftUI
 import CoreData
 
+let ANIMATIONS_QUEUE = DispatchQueue(label: "Animations",
+                                     qos: .userInteractive,
+                                     attributes: .concurrent,
+                                     autoreleaseFrequency: .workItem)
+
 let gradients: [MainDaypart: [Color]]! = [
     MainDaypart.dawn: [Color("Pink Dawn"), Color("Blue Dawn End Gradient")],
     MainDaypart.mid: [Color("Blue Mid Day"), Color("Blue Mid Day End Gradient")],
@@ -222,13 +227,15 @@ struct MainAssetByDaypart: View {
 
     var body: some View {
         if (currentDayPart == MainDaypart.night) {
-            Image("moon")
+            Image(systemName: "moon") // temporarily silence missing asset error
                 .resizable()
                 .frame(width: 140.0, height: 140.0)
                 .opacity(toggleAnimation ? 1: 0)
                 .animation(Animation.easeInOut(duration: 2.0).delay(0.7))
                 .onAppear {
-                    self.toggleAnimation = true
+                    ANIMATIONS_QUEUE.async {
+                        self.toggleAnimation = true
+                    }
                 }
         }
 
@@ -238,7 +245,9 @@ struct MainAssetByDaypart: View {
                 .offset(y: toggleAnimation ?  0 : 100)
                 .animation(Animation.easeInOut(duration: 2.0).delay(0.7))
                 .onAppear {
-                    self.toggleAnimation = true
+                    ANIMATIONS_QUEUE.async {
+                        self.toggleAnimation = true
+                    }
                 }
         }
 
@@ -249,7 +258,9 @@ struct MainAssetByDaypart: View {
                 .offset(y: toggleAnimation ?  100 : 0)
                 .animation(Animation.easeInOut(duration: 2.0).delay(0.5).delay(0.7))
                 .onAppear {
-                    self.toggleAnimation = true
+                    ANIMATIONS_QUEUE.async {
+                        self.toggleAnimation = true
+                    }
                 }
         }
 
@@ -259,7 +270,9 @@ struct MainAssetByDaypart: View {
                 .offset(y: toggleAnimation ?  100 : 180)
                 .animation(Animation.easeInOut(duration: 2.0).delay(0.7))
                 .onAppear {
-                    self.toggleAnimation = true
+                    ANIMATIONS_QUEUE.async {
+                        self.toggleAnimation = true
+                    }
                 }
         }
     }
@@ -361,7 +374,9 @@ struct MainWeatherImage: View {
             }
         }
         .onAppear {
-            self.toggleAnimation = true
+            ANIMATIONS_QUEUE.async {
+                toggleAnimation = true
+            }
         }
     }
 }
