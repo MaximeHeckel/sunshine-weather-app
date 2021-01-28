@@ -19,34 +19,34 @@ func getDayPart(sunrise: Double, sunset: Double, nextDaySunrise: Double, timesta
     let dawnEnd = sunrise + 86400 * 0.05
     let duskStart = sunset - 86400 * 0.03
     let duskEnd = sunset + 86400 * 0.05
-    
+
     let nextDawnStart = nextDaySunrise - 86400 * 0.03
     let nextDawnEnd = nextDaySunrise + 86400 * 0.05
-    
+
     if (timestamp > sunset && timestamp > dawnStart && timestamp < nextDawnStart) {
         // Current day after sunset before next sunset (sunrise is day 1 sunrise thus < timestramp)
         return MainDaypart.night
     }
-    
+
     if (timestamp < duskEnd && timestamp < dawnStart) {
         // Next day, timestamp is both < sunrise and < sunset
         return MainDaypart.night
     }
-    
+
     if (timestamp > dawnStart && timestamp < dawnEnd) {
         // Current day sunrise
         return MainDaypart.dawn
     }
-    
+
     if (timestamp > nextDawnStart && timestamp < nextDawnEnd) {
         // Next day sunrise (for hourly forecast)
         return MainDaypart.dawn
     }
-    
+
     if (timestamp > duskStart && timestamp < duskEnd) {
         return MainDaypart.dusk
     }
-    
+
     return MainDaypart.mid
 }
 
@@ -69,8 +69,8 @@ func metersPerSecToKMH(_ mps: Double) -> Double {
 struct FormattedTemperature: View {
     var temperature: Double
     var unit: Temperature
-    
-    @ViewBuilder var body: some View {
+
+    var body: some View {
         switch(unit) {
         case Temperature.fahrenheit:
             Text(String(format: "%.0f°F", kelvinToFarenheit(temperature)))
@@ -79,15 +79,15 @@ struct FormattedTemperature: View {
         default:
             Text(String(format: "%.0f°K", temperature))
         }
-        
+
     }
 }
 
 struct FormattedSpeed: View {
     var speed: Double
     var unit: Speed
-    
-    @ViewBuilder var body: some View {
+
+    var body: some View {
         switch(unit) {
         case Speed.mph:
             Text(String(format: "%.1f mph", metersPerSecToMPH(speed)))
@@ -95,7 +95,7 @@ struct FormattedSpeed: View {
             Text(String(format: "%.1f km/h", metersPerSecToKMH(speed)))
         default:
              Text(String(format: "%.1f m/s", speed))
-            
+
         }
     }
 }
@@ -113,22 +113,22 @@ struct VisualEffectView: UIViewRepresentable {
 struct BottomSheetView<Content: View>: View {
     @Binding var isOpen: Bool
     @GestureState private var translation: CGFloat = 0
-    
+
     let maxHeight: CGFloat
     let minHeight: CGFloat
     let content: Content
-    
+
     init(isOpen: Binding<Bool>, maxHeight: CGFloat, @ViewBuilder content: () -> Content) {
         self.minHeight = maxHeight * 1/7
         self.maxHeight = maxHeight
         self.content = content()
         self._isOpen = isOpen
     }
-    
+
     private var offset: CGFloat {
         isOpen ? 0 : maxHeight - minHeight
     }
-    
+
     private var indicator: some View {
         RoundedRectangle(cornerRadius: 50)
             .fill(Color.secondary)
@@ -137,7 +137,7 @@ struct BottomSheetView<Content: View>: View {
                 height: 5
             )
     }
-    
+
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
@@ -168,9 +168,9 @@ struct BottomSheetView<Content: View>: View {
 struct MetricsRow: View {
     var forecast: Response
     var speedUnit: Speed
-    
+
     @State private var toggleAnimation = false
-    
+
     var body: some View {
         VStack {
             HStack(spacing: 20) {
@@ -219,8 +219,8 @@ struct MetricsRow: View {
 struct MainAssetByDaypart: View {
     @State private var toggleAnimation = false
     var currentDayPart: MainDaypart
-    
-    @ViewBuilder var body: some View {
+
+    var body: some View {
         if (currentDayPart == MainDaypart.night) {
             Image("moon")
                 .resizable()
@@ -231,7 +231,7 @@ struct MainAssetByDaypart: View {
                     self.toggleAnimation = true
                 }
         }
-        
+
         if (currentDayPart == MainDaypart.mid) {
             Image("sun-mid").resizable()
                 .frame(width: 200.0, height: 200.0)
@@ -241,7 +241,7 @@ struct MainAssetByDaypart: View {
                     self.toggleAnimation = true
                 }
         }
-        
+
         if(currentDayPart == MainDaypart.dusk) {
             Image("sun-dawn").resizable()
                 .frame(width: 200.0, height: 200.0)
@@ -252,7 +252,7 @@ struct MainAssetByDaypart: View {
                     self.toggleAnimation = true
                 }
         }
-        
+
         if(currentDayPart == MainDaypart.dawn) {
             Image("sun-dawn").resizable()
                 .frame(width: 200.0, height: 200.0)
@@ -269,7 +269,7 @@ func isCloudy(_ weatherId: Int) -> Bool {
     if (weatherId > 802 || weatherId >= 500 && weatherId < 600 || weatherId >= 200 && weatherId < 300 || weatherId >= 600 && weatherId < 700) {
         return true
     }
-    
+
     return false
 }
 
@@ -277,16 +277,16 @@ struct MainWeatherImage: View {
     @State private var toggleAnimation = false
     var weather: WeatherObject
     var currentDayPart: MainDaypart
-    
+
     var isMainAssetHigh: Bool {
         return currentDayPart == MainDaypart.mid || currentDayPart == MainDaypart.night
     }
-    
-    @ViewBuilder var body: some View {
+
+    var body: some View {
         ZStack {
             if (weather.id >= 800) {
                 MainAssetByDaypart(currentDayPart: currentDayPart)
-                
+
                 if (weather.id == 801 || weather.id == 802) {
                     Image("cloud")
                         .resizable()
@@ -301,7 +301,7 @@ struct MainWeatherImage: View {
                         .offset(x: toggleAnimation ? -20 : -300, y: isMainAssetHigh ? -10 : 70)
                         .animation(Animation.easeInOut(duration: toggleAnimation ? 3.0 : 0).delay(0.7))
                 }
-                
+
                 if (weather.id > 802) {
                     // Broken clouds / overcast
                     Image("big-cloud")
@@ -312,50 +312,50 @@ struct MainWeatherImage: View {
                         .animation(Animation.easeInOut(duration: toggleAnimation ? 3.0 : 0))
                 }
             }
-            
+
             if (weather.id >= 500 && weather.id < 600) {
                 if (weather.id <= 501) {
                     Image("light-rain-drops")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 50)
-                    
+
                 } else {
                     Image("heavy-rain-drops")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 100, height: 50)
-                    
+
                 }
             }
-            
+
             if (weather.id >= 300 && weather.id < 400) {
                 if (weather.id <= 311) {
                     Image("light-rain-drops")
                         .resizable()
-                    
+
                 } else {
                     Image("heavy-rain-drops")
                         .resizable()
-                    
+
                 }
             }
-            
+
             if (weather.id >= 200 && weather.id < 300) {
                 // thunderstorm
                 MainAssetByDaypart(currentDayPart: currentDayPart)
             }
-            
+
             if (weather.id >= 600 && weather.id < 700) {
                 // snow
                 MainAssetByDaypart(currentDayPart: currentDayPart)
             }
-            
+
             if (weather.id >= 700 && weather.id < 800) {
                 // atmospheric
                 MainAssetByDaypart(currentDayPart: currentDayPart)
             }
-            
+
             else {
                 // MainAssetByDaypart(currentDayPart: currentDayPart)
             }
@@ -367,16 +367,16 @@ struct MainWeatherImage: View {
 }
 
 struct MainCard: View {
-    
+
     var forecast: Response
     var currentDayPart: MainDaypart
     var tempUnit: Temperature
     var speedUnit: Speed
-    
+
     var gradient: [Color] {
         return gradients[currentDayPart] ?? [Color.white]
     }
-    
+
     var body: some View {
         VStack {
             ZStack {
@@ -387,7 +387,7 @@ struct MainCard: View {
                             startPoint: UnitPoint(x: 0.5, y: 0),
                             endPoint: UnitPoint(x: 0.5, y: 0.6)))
                     .shadow(color: Color(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.25)), radius:10, x:0, y:4)
-                
+
                 // Cloudy overlay
                 if (isCloudy(forecast.current.weather[0].id)) {
                     if (currentDayPart == MainDaypart.night) {
@@ -410,14 +410,14 @@ struct MainCard: View {
                             .opacity(0.7)
                     }
                 }
-                
+
                 // Assets based on weather and time (each asset may have it's own position)
                 GeometryReader { geometry in
                     MainWeatherImage(weather: forecast.current.weather[0], currentDayPart: currentDayPart)
                         .frame(width: geometry.size.width, height: 260)
                         .clipped()
                 }
-                
+
                 // Temperature, conditions, feels like
                 VStack {
                     HStack {
@@ -432,11 +432,11 @@ struct MainCard: View {
                                     .font(.system(size: 14, weight: .semibold)).foregroundColor(.white)
                             }
                         }
-                        
+
                     }.padding(15)
-                    
+
                     Spacer()
-                    
+
                     ZStack {
                         VisualEffectView(effect: UIBlurEffect(style: .light))
                             .cornerRadius(25)
@@ -453,14 +453,14 @@ struct MainCard: View {
                                     Text("Next sunrise at \(getNextSunriseTime(forecast.current.sunrise))")
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.black)
-                                    
+
                                 }
                                 .frame(height: 70)
                                 .padding(.leading,5)
                                 .padding(.trailing,5)
                             }
                         }
-                        
+
                     }
                     .frame(height:currentDayPart == MainDaypart.night ? 125 : 230)
                 }
@@ -470,8 +470,8 @@ struct MainCard: View {
         .padding(.leading,8)
         .padding(.trailing,8)
     }
-    
-    
+
+
     func getNextSunriseTime(_ sunrise: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(sunrise))
         let formatter = DateFormatter()
@@ -479,7 +479,7 @@ struct MainCard: View {
         formatter.locale = NSLocale.current
         formatter.timeZone = TimeZone(identifier: forecast.timezone)
         var formattedDate:String {formatter.string(from: date)}
-        
+
         return formattedDate
     }
 }
@@ -493,12 +493,12 @@ struct MainWeatherScreen: View {
     var status: ViewState
     var tempUnit: Temperature
     var speedUnit: Speed
-    
+
     var currentDayPart: MainDaypart {
         return getDayPart(sunrise: Double(forecast.current.sunrise), sunset: Double(forecast.current.sunset), nextDaySunrise: Double(forecast.daily[1].sunrise), timestamp: Double(forecast.current.dt))
     }
-    
-    
+
+
     var body: some View {
         VStack(spacing: 0) {
             if (status == ViewState.loading && forecast == nil) {
@@ -523,11 +523,11 @@ struct MainWeatherScreen: View {
                         Text("\(name)").font(.system(size: 24, weight: .medium))
                         Spacer()
                     }
-                    
+
                 }
                 .padding([.leading, .trailing], 20)
                 .frame(height: 105, alignment: .leading)
-                
+
                 // Main Card
                 VStack {
                     if (isSelected) {
@@ -551,19 +551,19 @@ struct MainWeatherScreen: View {
                 .transition(.opacity)
                 .animation(.easeInOut)
             }
-            
+
         }
         .transition(.opacity)
         .animation(.easeInOut)
     }
-    
+
     func getDate(_ timestamp: Int) -> String {
         var date: Date { Date(timeIntervalSince1970: Double(timestamp)) }
         let formatter = DateFormatter()
         formatter.dateFormat = "E MMM dd"
         formatter.timeZone = TimeZone(identifier: forecast.timezone)
         var formattedDate:String {formatter.string(from: date)}
-        
+
         return formattedDate
     }
 }
@@ -590,12 +590,12 @@ class ViewModel: ObservableObject {
             UserDefaults.standard.set(speed.rawValue, forKey: "speed")
         }
     }
-    
+
     @Published var focusedItem: Response?
-    
-    
+
+
     let client = WeatherAPIClient()
-    
+
     init() {
         self.focusedItem = nil
         self.selectTabIndex = 0
@@ -604,9 +604,9 @@ class ViewModel: ObservableObject {
         self.temperature = (UserDefaults.standard.object(forKey: "temperature") == nil ? Temperature.fahrenheit : Temperature(rawValue: UserDefaults.standard.object(forKey: "temperature") as! Int)) ?? Temperature.fahrenheit
         self.speed = (UserDefaults.standard.object(forKey: "speed") == nil ? Speed.mph : Speed(rawValue: UserDefaults.standard.object(forKey: "speed") as! Int)) ?? Speed.mph
     }
-    
-    
-    
+
+
+
     func refresh(_ index: Int, _ savedLocations: FetchedResults<Location>) {
         // print("Trying refresh at index \(index)")
         if (!items.indices.contains(index) && savedLocations.indices.contains(index)) {
@@ -616,9 +616,9 @@ class ViewModel: ObservableObject {
             let formatter = DateFormatter()
             formatter.dateFormat = "E, dd MMM, HH:mm:ss"
             var formattedDate:String {formatter.string(from: Date(timeIntervalSince1970: Double(items[index].current.dt)))}
-            
+
             let diff = Int(Date().timeIntervalSince1970) - items[index].current.dt
-            
+
             if (diff >= REFRESH_INTERVAL) {
                 // print("Refresh")
                 fetch(index, savedLocations)
@@ -626,7 +626,7 @@ class ViewModel: ObservableObject {
         }
         return
     }
-    
+
     private func fetch(_ index: Int, _ savedLocations: FetchedResults<Location>) {
         if (savedLocations.indices.contains(index)) {
             self.state = ViewState.loading
@@ -641,14 +641,14 @@ class ViewModel: ObservableObject {
                                 self.items[index] = response
                             }
                             self.state = ViewState.idle
-                            
+
                         }
-                        
+
                     case .failure(let error):
                         print("Error! \(error)")
                         self.state = ViewState.error
                     }
-                    
+
                 }
             }
         }
@@ -664,17 +664,17 @@ struct ContentView: View {
     @State private var error = false
     @State private var isSheetPresented = false
     @State private var bottomSheetShown = false
-    
-    
+
+
     @FetchRequest(entity: Location.entity(),sortDescriptors: [NSSortDescriptor(keyPath: \Location.timestamp, ascending: true)], animation: .default)
     private var savedLocations: FetchedResults<Location>
-    
+
     let client = WeatherAPIClient()
-    
+
     let locationSearchService = LocationSearchService()
     // let refreshTimer = Timer.publish(every: TimeInterval(3600), on: .main, in: .common).autoconnect()
-    
-    
+
+
     var body: some View {
         ZStack {
             Color(.secondarySystemBackground)
@@ -694,7 +694,7 @@ struct ContentView: View {
                     Spacer()
                 }
                 .padding([.top, .leading], 20)
-                
+
                 // Center and Bottom View
                 GeometryReader { geometry in
                     if(savedLocations.count != 0 ){
@@ -710,7 +710,7 @@ struct ContentView: View {
                             })
                             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                             .id(savedLocations.count)
-                            
+
                             BottomSheetView(
                                 isOpen: self.$bottomSheetShown,
                                 maxHeight: geometry.size.height * 0.9
@@ -736,6 +736,6 @@ struct ContentView: View {
             SheetPane(locationSearchService: locationSearchService, savedLocations: savedLocations)
                 .environmentObject(viewModel)
         })
-        
+
     }
 }
